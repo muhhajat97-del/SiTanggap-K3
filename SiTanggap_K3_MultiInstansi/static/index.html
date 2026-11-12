@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SiTanggap K3 — platform multi-instansi pelaporan bahaya dan tindak lanjut keselamatan konstruksi.">
+  <title>SiTanggap K3 | Sistem Keselamatan Konstruksi Multi-Instansi</title>
+  <link rel="stylesheet" href="./static/styles.css">
+</head>
+<body>
+  <main id="login-screen" class="login-screen hidden">
+    <section class="login-card">
+      <div class="brand-lockup"><div class="brand-symbol">✓</div><div><b>SiTanggap K3</b><small>Keselamatan Konstruksi Multi-Instansi</small></div></div>
+      <div class="eyebrow">WORKSPACE TERISOLASI PER INSTANSI</div>
+      <h1 id="auth-heading">Masuk ke Instansi Anda</h1>
+      <p class="muted" id="auth-subtitle">Setiap instansi memiliki ruang data terpisah dan aman dari instansi lain.</p>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-auth-mode="login">Masuk Akun</button>
+        <button type="button" class="auth-tab" data-auth-mode="join">Gabung Instansi</button>
+        <button type="button" class="auth-tab" id="tab-register-org" data-auth-mode="register-org">Instansi Baru</button>
+      </div>
+
+      <!-- 1. FORM LOGIN -->
+      <form id="login-form" class="stack-form">
+        <label>Kode Instansi<input name="org_code" autocomplete="organization" required placeholder="Contoh: pt-wijaya-k3 atau demo-k3"><small>Kode unik instansi/proyek Anda.</small></label>
+        <label>Username<input name="username" autocomplete="username" required placeholder="Masukkan username"></label>
+        <label>Kata sandi<input name="password" type="password" autocomplete="current-password" required placeholder="Masukkan kata sandi"></label>
+        <button class="btn primary full" type="submit">Masuk ke Workspace <span>→</span></button>
+        <p id="login-error" class="form-error" role="alert"></p>
+      </form>
+
+      <!-- 2. FORM GABUNG INSTANSI DENGAN KODE UNDANGAN -->
+      <form id="join-form" class="stack-form hidden">
+        <label>Kode Undangan Instansi<input name="invite_code" required placeholder="Contoh: K3-XXXX-XXXX" style="text-transform:uppercase"><small>Minta kode undangan dari Administrator K3 instansi Anda.</small></label>
+        <label>Nama lengkap<input name="full_name" autocomplete="name" required minlength="3" placeholder="Nama lengkap pekerja / petugas"></label>
+        <label>Username<input name="username" autocomplete="username" required minlength="3" pattern="[A-Za-z0-9_.]+" placeholder="Huruf, angka, titik, atau garis bawah"></label>
+        <label>Kata sandi<input name="password" type="password" autocomplete="new-password" required minlength="10" placeholder="Minimal 10 karakter"></label>
+        <button class="btn primary full" type="submit">Gabung & Masuk <span>→</span></button>
+        <p id="join-error" class="form-error" role="alert"></p>
+      </form>
+
+      <!-- 3. FORM DAFTAR INSTANSI / PROYEK BARU -->
+      <form id="register-org-form" class="stack-form hidden">
+        <label>Nama Instansi / Perusahaan / Proyek<input name="org_name" required minlength="3" placeholder="Contoh: PT Karya Konstruksi Nusantara"></label>
+        <label>Buat Kode Instansi (ID Unik)<input name="org_code" required minlength="3" maxlength="32" pattern="[a-z0-9_-]+" placeholder="Contoh: karya-konstruksi (huruf kecil & angka)"><small>Digunakan oleh seluruh anggota instansi Anda saat login.</small></label>
+        <label>Nama Lengkap Administrator<input name="full_name" required minlength="3" placeholder="Nama penanggung jawab K3 / Admin"></label>
+        <label>Username Administrator<input name="username" required minlength="3" pattern="[A-Za-z0-9_.]+" placeholder="Contoh: admin.k3"></label>
+        <label>Kata Sandi Administrator<input name="password" type="password" required minlength="10" placeholder="Minimal 10 karakter"></label>
+        <button class="btn primary full" type="submit">Buat Workspace Instansi <span>→</span></button>
+        <p id="register-org-error" class="form-error" role="alert"></p>
+      </form>
+
+      <div class="login-foot">SiTanggap K3 · Isolasi Data Multi-Instansi & Multi-Proyek</div>
+    </section>
+  </main>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand-lockup"><div class="brand-symbol">✓</div><div><b>SiTanggap K3</b><small id="sidebar-org-name">Keselamatan Konstruksi</small></div></div>
+      <div class="org-pill-box">
+        <small>WORKSPACE AKTIF</small>
+        <b id="sidebar-org-badge">—</b>
+        <span id="sidebar-org-code">kode: —</span>
+      </div>
+      <div class="nav-caption">MENU UTAMA</div>
+      <nav class="nav-list" aria-label="Navigasi utama">
+        <button class="nav-item active" data-page="dashboard"><span>▦</span>Dashboard</button>
+        <button class="nav-item" data-page="report"><span>＋</span>Buat Laporan</button>
+        <button class="nav-item" data-page="monitoring"><span>▤</span>Monitoring</button>
+        <button class="nav-item admin-only hidden" data-page="users"><span>♙</span>Instansi & Pengguna</button>
+        <button class="nav-item" data-page="guide"><span>ⓘ</span>Panduan</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip"><b>Isolasi Data Terjamin</b><p>Seluruh laporan, foto, dan akun hanya dapat diakses oleh anggota terdaftar di instansi ini.</p></div>
+        <div class="version">SiTanggap K3 · Edisi Multi-Instansi</div>
+      </div>
+    </aside>
+
+    <section class="main-area">
+      <header class="topbar">
+        <div>
+          <div class="breadcrumb"><span id="topbar-org-name">Instansi</span> / <b id="breadcrumb">Dashboard</b></div>
+          <div class="mobile-brand" id="mobile-org-name">SiTanggap K3</div>
+        </div>
+        <div class="account-area"><div class="avatar" id="avatar">K3</div><div class="account-name"><b id="account-name">Pengguna</b><small id="account-role">Peran</small></div><button class="btn secondary small" id="change-password-open">Ganti sandi</button><button class="btn ghost small" id="logout-button">Keluar</button></div>
+      </header>
+
+      <main class="content">
+        <section class="page active" id="page-dashboard">
+          <div class="page-heading"><div><div class="eyebrow" id="dash-org-eyebrow">RINGKASAN INSTANSI</div><h1>Dashboard Keselamatan</h1><p class="muted">Pantau laporan bahaya, tingkat risiko, dan tindak lanjut keselamatan konstruksi di instansi Anda.</p></div><button class="btn primary" data-go="report">＋ Buat Laporan Bahaya</button></div>
+          <div class="stat-grid">
+            <article class="stat-card"><div class="stat-label">Total laporan <span class="stat-icon blue">▤</span></div><div class="stat-number" id="stat-total">0</div><div class="stat-foot">Laporan di instansi ini</div></article>
+            <article class="stat-card"><div class="stat-label">Risiko tinggi <span class="stat-icon red">⚠</span></div><div class="stat-number" id="stat-high">0</div><div class="stat-foot">Prioritas penanganan segera</div></article>
+            <article class="stat-card"><div class="stat-label">Dalam proses <span class="stat-icon amber">↻</span></div><div class="stat-number" id="stat-progress">0</div><div class="stat-foot">Sedang ditindaklanjuti</div></article>
+            <article class="stat-card"><div class="stat-label">Selesai <span class="stat-icon green">✓</span></div><div class="stat-number" id="stat-done">0</div><div class="stat-foot">Tindakan koreksi ditutup</div></article>
+          </div>
+          <div class="two-column">
+            <article class="panel"><div class="panel-heading"><div><h2>Distribusi tingkat risiko</h2><p>Pengelompokan berdasarkan skor kemungkinan × dampak</p></div><span class="pill info">Data terisolasi</span></div><div class="panel-body"><div id="risk-bars" class="risk-bars"></div><div class="legend"><span><i class="dot high"></i>Tinggi (15–25)</span><span><i class="dot medium"></i>Sedang (6–14)</span><span><i class="dot low"></i>Rendah (1–5)</span></div></div></article>
+            <article class="panel"><div class="panel-heading"><div><h2>Laporan terbaru</h2><p>Temuan terakhir di instansi Anda</p></div><button class="link-button" data-go="monitoring">Lihat semua →</button></div><div class="panel-body"><div id="recent-list" class="recent-list"></div></div></article>
+          </div>
+          <article class="panel section-gap"><div class="panel-heading"><div><h2>Prioritas tindak lanjut</h2><p>Laporan yang belum berstatus selesai, diurutkan berdasarkan skor risiko</p></div><button class="link-button" data-go="monitoring">Buka monitoring →</button></div><div class="table-scroll"><table><thead><tr><th>ID laporan</th><th>Temuan</th><th>Lokasi</th><th>Risiko</th><th>Status</th><th>Penanggung jawab</th></tr></thead><tbody id="priority-table"></tbody></table></div></article>
+        </section>
+
+        <section class="page" id="page-report">
+          <div class="page-heading"><div><div class="eyebrow">FORMULIR DIGITAL</div><h1>Buat Laporan Bahaya</h1><p class="muted">Catat kondisi tidak aman, tindakan tidak aman, atau kejadian nyaris celaka di area kerja instansi Anda.</p></div></div>
+          <div class="notice"><b>Utamakan keselamatan.</b> Jika ditemukan bahaya yang mengancam keselamatan secara langsung, lakukan pengamanan area dan laporkan segera kepada pengawas/HSE sesuai prosedur proyek.</div>
+          <form id="report-form" class="form-layout">
+            <article class="panel form-panel"><div class="panel-heading"><div><h2>Informasi temuan</h2><p>Kolom bertanda * wajib diisi</p></div></div><div class="panel-body"><div class="form-grid">
+              <label>Nama pelapor *<input name="reporter" id="reporter" required placeholder="Nama petugas/pekerja"></label>
+              <label>Tanggal dan waktu *<input name="report_date" id="report-date" type="datetime-local" required></label>
+              <label>Lokasi pekerjaan *<input name="location" required placeholder="Contoh: Lantai 2, zona struktur A"></label>
+              <label>Kategori bahaya *<select name="category" required><option value="">Pilih kategori</option><option>Jatuh dari ketinggian</option><option>Tertimpa/terbentur benda</option><option>Peralatan dan mesin</option><option>Kelistrikan</option><option>Penggalian dan galian</option><option>Housekeeping</option><option>APD</option><option>Lingkungan kerja</option><option>Lainnya</option></select></label>
+              <label class="span-2">Judul temuan *<input name="title" required placeholder="Contoh: Pekerja di tepi lantai tanpa pelindung"></label>
+              <label class="span-2">Uraian kondisi bahaya *<textarea name="description" rows="4" required placeholder="Jelaskan kondisi yang ditemukan, aktivitas yang berlangsung, potensi akibat, dan kondisi pengamanan saat ditemukan."></textarea><small>Tuliskan fakta yang diamati. Hindari menyimpulkan penyebab sebelum pemeriksaan.</small></label>
+            </div></div></article>
+            <article class="panel form-panel"><div class="panel-heading"><div><h2>Penilaian risiko dan tindak lanjut awal</h2><p>Skor dihitung otomatis dari kemungkinan × dampak</p></div></div><div class="panel-body"><div class="form-grid">
+              <label>Kemungkinan terjadi (1–5) *<select name="likelihood" id="likelihood" required><option value="">Pilih nilai</option><option value="1">1 – Sangat jarang</option><option value="2">2 – Jarang</option><option value="3">3 – Mungkin</option><option value="4">4 – Sering</option><option value="5">5 – Sangat sering</option></select></label>
+              <label>Dampak/keparahan (1–5) *<select name="impact" id="impact" required><option value="">Pilih nilai</option><option value="1">1 – Tidak signifikan</option><option value="2">2 – Ringan</option><option value="3">3 – Sedang</option><option value="4">4 – Berat</option><option value="5">5 – Sangat berat/fatal</option></select></label>
+              <div class="risk-preview span-2"><div><small>SKOR RISIKO</small><strong id="preview-score">–</strong></div><div><small>TINGKAT RISIKO</small><span id="preview-level" class="pill neutral">Menunggu penilaian</span></div><p id="preview-note">Pilih nilai kemungkinan dan dampak untuk menghitung skor.</p></div>
+              <label>Penanggung jawab tindak lanjut *<input name="assignee" required placeholder="Nama pengawas/pelaksana/HSE"></label>
+              <label>Target penyelesaian<input type="date" name="due_date"></label>
+              <label class="span-2">Rencana tindakan koreksi awal<textarea name="corrective_action" rows="3" placeholder="Contoh: Pasang pembatas sementara dan hentikan pekerjaan di area terdampak."></textarea></label>
+              <label class="span-2">Foto temuan (opsional)<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"><small>Format PNG/JPG/WEBP, maksimum 5 MB.</small></label>
+            </div><div class="form-actions"><button type="reset" class="btn secondary">Reset</button><button type="submit" class="btn primary">Simpan Laporan <span>→</span></button></div></div></article>
+          </form>
+        </section>
+
+        <section class="page" id="page-monitoring">
+          <div class="page-heading"><div><div class="eyebrow">PENGENDALIAN DAN PEMANTAUAN</div><h1>Monitoring Laporan</h1><p class="muted">Telusuri temuan, lihat dokumentasi, dan pantau tindak lanjutnya di instansi Anda.</p></div><button class="btn secondary" id="export-button">↓ Ekspor CSV</button></div>
+          <article class="panel"><div class="panel-heading toolbar-heading"><div><h2>Daftar laporan instansi</h2><p id="table-count">0 laporan tercatat</p></div><div class="toolbar"><input id="search-input" class="control" type="search" placeholder="Cari ID, judul, lokasi..."><select id="filter-risk" class="control"><option value="all">Semua risiko</option><option>Tinggi</option><option>Sedang</option><option>Rendah</option></select><select id="filter-status" class="control"><option value="all">Semua status</option><option>Terbuka</option><option>Dalam Proses</option><option>Selesai</option></select></div></div><div class="table-scroll"><table><thead><tr><th>ID</th><th>Temuan / kategori</th><th>Lokasi</th><th>Tanggal</th><th>Skor</th><th>Risiko</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="reports-table"></tbody></table></div><div id="table-empty" class="empty hidden"><b>Belum ada laporan</b>Ubah filter atau buat laporan bahaya baru.</div></article>
+        </section>
+
+        <section class="page" id="page-users">
+          <div class="page-heading"><div><div class="eyebrow">ADMINISTRASI WORKSPACE</div><h1>Instansi & Pengguna</h1><p class="muted">Kelola kode undangan instansi dan hak akses anggota tim K3 Anda.</p></div></div>
+
+          <article class="panel" style="margin-bottom:16px">
+            <div class="panel-heading"><div><h2>Identitas & Kode Undangan Instansi</h2><p>Bagikan Kode Instansi dan Kode Undangan hanya kepada anggota internal instansi Anda.</p></div></div>
+            <div class="panel-body">
+              <div class="invite-grid">
+                <div class="invite-box">
+                  <small>KODE INSTANSI (UNTUK LOGIN)</small>
+                  <strong id="org-info-code">—</strong>
+                </div>
+                <div class="invite-box">
+                  <small>KODE UNDANGAN ANGGOTA BARU</small>
+                  <strong id="org-info-invite">—</strong>
+                  <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                    <button type="button" class="btn secondary small" id="copy-invite-btn">Salin Kode Undangan</button>
+                    <button type="button" class="btn ghost small" id="rotate-invite-btn">Acak Kode Baru</button>
+                  </div>
+                </div>
+              </div>
+              <form id="org-settings-form" class="form-grid" style="margin-top:16px;padding-top:14px;border-top:1px solid #edf1f6">
+                <label>Nama Resmi Instansi / Proyek<input name="name" id="org-settings-name" required minlength="3"></label>
+                <label>Pendaftaran Mandiri via Kode Undangan
+                  <select name="allow_member_signup" id="org-settings-signup">
+                    <option value="1">Aktif (Anggota bisa daftar dengan Kode Undangan)</option>
+                    <option value="0">Nonaktif (Hanya Admin yang bisa membuat akun)</option>
+                  </select>
+                </label>
+                <div class="span-2" style="display:flex;justify-content:flex-end">
+                  <button type="submit" class="btn primary small">Simpan Pengaturan Instansi</button>
+                </div>
+              </form>
+            </div>
+          </article>
+
+          <div class="two-column users-layout">
+            <article class="panel"><div class="panel-heading"><div><h2>Tambah akun anggota</h2><p>Akun baru wajib mengganti kata sandi saat login pertama.</p></div></div><div class="panel-body"><form id="user-form" class="stack-form"><label>Nama lengkap<input name="full_name" required minlength="3"></label><label>Username<input name="username" required minlength="3" pattern="[A-Za-z0-9_.]+"></label><label>Peran<select name="role"><option value="hse">Petugas K3 / HSE</option><option value="pelapor">Pelapor</option><option value="admin">Administrator Instansi</option></select></label><label>Kata sandi awal<input name="password" type="password" required minlength="10"><small>Minimal 10 karakter.</small></label><button class="btn primary" type="submit">＋ Buat akun anggota</button></form></div></article>
+            <article class="panel"><div class="panel-heading"><div><h2>Daftar pengguna instansi</h2><p>Hanya menampilkan pengguna di dalam instansi Anda.</p></div><button class="link-button" id="refresh-users">Muat ulang ↻</button></div><div class="table-scroll"><table><thead><tr><th>Nama / username</th><th>Peran</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="users-table"></tbody></table></div></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-guide">
+          <div class="page-heading"><div><div class="eyebrow">PUSAT BANTUAN</div><h1>Panduan Penggunaan Multi-Instansi</h1><p class="muted">Cara kerja isolasi data antar instansi dan alur pelaporan K3.</p></div></div>
+          <div class="guide-grid">
+            <article class="panel guide-card"><div class="guide-number">01</div><h3>Workspace Terpisah</h3><p>Setiap instansi/proyek memiliki Kode Instansi unik. Laporan, foto temuan, dan daftar pengguna terisolasi total dan tidak dapat dilihat instansi lain.</p></article>
+            <article class="panel guide-card"><div class="guide-number">02</div><h3>Undang Anggota Tim</h3><p>Administrator instansi dapat membagikan Kode Undangan agar pekerja mendaftar mandiri sebagai Pelapor, atau membuatkan akun Petugas HSE secara langsung.</p></article>
+            <article class="panel guide-card"><div class="guide-number">03</div><h3>Catat & Nilai Risiko</h3><p>Pelapor mencatat temuan bahaya beserta foto. Sistem menghitung skor risiko otomatis dari kemungkinan (1–5) × dampak (1–5).</p></article>
+            <article class="panel guide-card"><div class="guide-number">04</div><h3>Tindak Lanjut HSE</h3><p>Petugas K3/HSE dan Admin instansi memperbarui status penanganan, target waktu, dan catatan tindakan koreksi hingga selesai.</p></article>
+            <article class="panel guide-card"><div class="guide-number">05</div><h3>Jejak Audit (Riwayat)</h3><p>Seluruh perubahan status, penanggung jawab, dan komentar tercatat secara kronologis untuk keperluan audit K3 internal instansi.</p></article>
+            <article class="panel guide-card"><div class="guide-number">06</div><h3>Ekspor Data CSV</h3><p>Unduh rekap laporan khusus instansi Anda dalam format CSV kapan saja untuk pelaporan manajemen atau RKK.</p></article>
+          </div>
+        </section>
+        <div class="page-footer">SiTanggap K3 · Sistem Informasi Pelaporan Bahaya & Tindak Lanjut Keselamatan Konstruksi Multi-Instansi.</div>
+      </main>
+    </section>
+  </div>
+
+  <div id="detail-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detail-title"><div class="modal"><div class="modal-head"><div><div class="eyebrow">RINCIAN TEMUAN</div><h2 id="detail-title">Detail laporan</h2></div><button class="close-button" id="modal-close" aria-label="Tutup">×</button></div><div id="detail-content" class="modal-content"></div></div></div>
+  <div id="password-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="password-title"><div class="modal password-modal"><div class="modal-head"><div><div class="eyebrow">KEAMANAN AKUN</div><h2 id="password-title">Ganti kata sandi</h2></div><button class="close-button" id="password-close" aria-label="Tutup">×</button></div><div class="modal-content"><p class="muted" id="password-help">Gunakan kata sandi minimal 10 karakter.</p><form id="password-form" class="stack-form"><label>Kata sandi saat ini<input name="current_password" type="password" required autocomplete="current-password"></label><label>Kata sandi baru<input name="new_password" type="password" required minlength="10" autocomplete="new-password"></label><label>Ulangi kata sandi baru<input name="confirm_password" type="password" required minlength="10" autocomplete="new-password"></label><p class="form-error" id="password-error"></p><button class="btn primary" type="submit">Simpan kata sandi</button></form></div></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./static/app.js"></script>
+</body>
+</html>
